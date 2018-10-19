@@ -48,14 +48,16 @@ class Standings
             $homeTeamPosition = $this->getTeamPosition($match->getHomeTeam());
             $awayTeamPosition = $this->getTeamPosition($match->getAwayTeam());
 
-            // Home team won, yay!
-            if ($match->getHomeTeamGoals() > $match->getAwayTeamGoals()) {
+            if ($match->getHomeTeamGoals() > $match->getAwayTeamGoals()) { // Home team won, yay!
                 $homeTeamPosition->recordWin();
+                $awayTeamPosition->recordLoss();
             }
-
-            // Away team won, awww :(
-            if ($match->getAwayTeamGoals() > $match->getHomeTeamGoals()) {
+            elseif ($match->getAwayTeamGoals() > $match->getHomeTeamGoals()) { // Away team won, awww :(
+                $homeTeamPosition->recordLoss();
                 $awayTeamPosition->recordWin();
+            } else { // Tie
+                $homeTeamPosition->recordTie();
+                $awayTeamPosition->recordTie();
             }
 
             // Record who scored what
@@ -77,6 +79,10 @@ class Standings
                 $teamPosition->getGoalsScored(),
                 $teamPosition->getGoalsAgainst(),
                 $teamPosition->getPoints(),
+                $teamPosition->getGamesPlayed(),
+                $teamPosition->getGamesWon(),
+                $teamPosition->getGamesTied(),
+                $teamPosition->getGamesLost(),
             ];
         }
 
