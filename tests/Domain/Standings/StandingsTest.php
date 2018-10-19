@@ -61,4 +61,31 @@ class StandingsTest extends TestCase
         // Then
         $this->assertSame($expectedStandings, $actualStandings);
     }
+
+    public function testgetSortedStandingsCanBeWeirdWithManyTeams()
+    {
+        $tigers = Team::create('Tigers');
+        $elephants = Team::create('Elephants');
+
+        $match = Match::create($tigers, $elephants, 0, 1);
+
+        $this->standings->record($match);
+
+        $tigers = Team::create('Tigers');
+        $elephants = Team::create('Elephants');
+
+        $match = Match::create($tigers, $elephants, 0, 2);
+
+        $this->standings->record($match);
+
+        // When
+        $actualStandings = $this->standings->getSortedStandings();
+        $expectedStandings = [
+            ['Elephants', 3, 0, 6],
+            ['Tigers', 0, 3, 0],
+        ];
+
+        // Then
+        $this->assertSame($expectedStandings, $actualStandings);
+    }
 }
