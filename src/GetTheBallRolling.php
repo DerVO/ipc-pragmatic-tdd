@@ -23,4 +23,29 @@ class GetTheBallRolling
     {
         return $this->name;
     }
+
+    public function getBinaryGap(int $number)
+    {
+        $binary = decbin($number);
+
+        $counting = false;
+        $gap = 0;
+        for ($i = 0; $i < strlen($binary); $i += 1) {
+            if ($counting == true && $binary[$i] == 1) {
+                $counting = false;
+                continue;
+            }
+
+            if ($counting == false && $binary[$i] == 1) {
+                $counting = true;
+                continue;
+            }
+
+            if ($counting && $binary[$i] == 0) {
+                $gap += 1;
+            }
+        }
+
+        return $gap;
+    }
 }
