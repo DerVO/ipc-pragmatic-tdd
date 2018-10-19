@@ -6,6 +6,7 @@ namespace BallGame\Domain\Standings;
 
 
 use BallGame\Domain\Match\Match;
+use BallGame\Domain\Team\Team;
 
 class Standings
 {
@@ -31,16 +32,8 @@ class Standings
     public function getSortedStandings()
     {
         foreach ($this->matches as $match) {
-            if (!isset($this->teamPositions[spl_object_hash($match->getHomeTeam())])) {
-                $this->teamPositions[spl_object_hash($match->getHomeTeam())] = new TeamPosition($match->getHomeTeam());
-            }
-
-            if (!isset($this->teamPositions[spl_object_hash($match->getAwayTeam())])) {
-                $this->teamPositions[spl_object_hash($match->getAwayTeam())] = new TeamPosition($match->getAwayTeam());
-            }
-
-            $homeTeamPosition = $this->teamPositions[spl_object_hash($match->getHomeTeam())];
-            $awayTeamPosition = $this->teamPositions[spl_object_hash($match->getAwayTeam())];
+            $homeTeamPosition = $this->getTeamPosition($match->getHomeTeam());
+            $awayTeamPosition = $this->getTeamPosition($match->getAwayTeam());
 
             // Home team won, yay!
             if ($match->getHomeTeamGoals() > $match->getAwayTeamGoals()) {
@@ -87,5 +80,18 @@ class Standings
         }
 
         return $output;
+    }
+
+    /**
+     * @param $match
+     * @return TeamPosition
+     */
+    public function getTeamPosition(Team $team): TeamPosition
+    {
+        if (!isset($this->teamPositions[spl_object_hash($team)])) {
+            $this->teamPositions[spl_object_hash($team)] = new TeamPosition($team);
+        }
+        $homeTeamPosition = $this->teamPositions[spl_object_hash($team)];
+        return $homeTeamPosition;
     }
 }
