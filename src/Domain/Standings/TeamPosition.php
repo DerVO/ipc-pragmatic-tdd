@@ -64,6 +64,11 @@ class TeamPosition
         return $this->goalsAgainst;
     }
 
+    public function getGamesWon()
+    {
+        return $this->wins;
+    }
+
     /**
      * @return Team
      */

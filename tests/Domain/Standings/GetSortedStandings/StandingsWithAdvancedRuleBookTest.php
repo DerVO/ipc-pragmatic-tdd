@@ -49,8 +49,8 @@ class StandingsWithAdvancedRuleBookTest extends TestCase
         // When
         $actualStandings = $this->standings->getSortedStandings();
         $expectedStandings = [
-            ['Elephants', 11, 2, 3],
-            ['Tigers', 2, 11, 3],
+            ['Elephants', 1, 11, 2, 3],
+            ['Tigers', 1, 2, 11, 3],
         ];
 
         // Then

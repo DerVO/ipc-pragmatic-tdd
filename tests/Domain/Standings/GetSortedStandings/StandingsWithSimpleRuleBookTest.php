@@ -47,8 +47,8 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         // When
         $actualStandings = $this->standings->getSortedStandings();
         $expectedStandings = [
-            ['Tigers', 2, 1, 3],
-            ['Elephants', 1, 2, 0],
+            ['Tigers', 1, 2, 1, 3],
+            ['Elephants', 0, 1, 2, 0],
         ];
 
         // Then
@@ -70,8 +70,8 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         // When
         $actualStandings = $this->standings->getSortedStandings();
         $expectedStandings = [
-            ['Elephants', 1, 0, 3],
-            ['Tigers', 0, 1, 0],
+            ['Elephants', 1, 1, 0, 3],
+            ['Tigers', 0, 0, 1, 0],
         ];
 
         // Then
@@ -93,8 +93,8 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         // When
         $actualStandings = $this->standings->getSortedStandings();
         $expectedStandings = [
-            ['Elephants', 3, 0, 6],
-            ['Tigers', 0, 3, 0],
+            ['Elephants', 2, 3, 0, 6],
+            ['Tigers', 0, 0, 3, 0],
         ];
 
         // Then

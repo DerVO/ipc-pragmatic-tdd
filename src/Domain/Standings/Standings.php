@@ -72,6 +72,7 @@ class Standings
         foreach ($this->teamPositions as $teamPosition) {
             $output[] = [
                 $teamPosition->getTeam()->getName(),
+                $teamPosition->getGamesWon(),
                 $teamPosition->getGoalsScored(),
                 $teamPosition->getGoalsAgainst(),
                 $teamPosition->getPoints(),

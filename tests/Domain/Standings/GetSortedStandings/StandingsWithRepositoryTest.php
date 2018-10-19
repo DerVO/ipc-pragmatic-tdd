@@ -41,8 +41,8 @@ class StandingsWithRepositoryTest extends TestCase
         // When
         $actualStandings = $this->standings->getSortedStandings();
         $expectedStandings = [
-            ['Tigers', 2, 1, 3],
-            ['Elephants', 1, 2, 0],
+            ['Tigers', 1, 2, 1, 3],
+            ['Elephants', 0, 1, 2, 0],
         ];
 
         // Then
