@@ -28,8 +28,8 @@ class AdvancedRuleBook implements RuleBookInterface
             if ($teamB->getGoalsScored() > $teamA->getGoalsScored()) {
                 return 1;
             }
-
-            return 0;
         }
+
+        return 0;
     }
 }
