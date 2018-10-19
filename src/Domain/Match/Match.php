@@ -42,6 +42,38 @@ class Match
         $this->awayTeamGoals = $awayTeamGoals;
     }
 
+    /**
+     * @return Team
+     */
+    public function getHomeTeam(): Team
+    {
+        return $this->homeTeam;
+    }
+
+    /**
+     * @return Team
+     */
+    public function getAwayTeam(): Team
+    {
+        return $this->awayTeam;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHomeTeamGoals(): int
+    {
+        return $this->homeTeamGoals;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAwayTeamGoals(): int
+    {
+        return $this->awayTeamGoals;
+    }
+
     public static function create(
         Team $homeTeam,
         Team $awayTeam,

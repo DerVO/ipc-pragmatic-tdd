@@ -21,4 +21,12 @@ class Team
     {
         return new self($name);
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }
