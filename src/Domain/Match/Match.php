@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BallGame\Domain\Match;
 
 
+use BallGame\Domain\Exception\BadMatchException;
 use BallGame\Domain\Team\Team;
 
 class Match
@@ -81,6 +82,10 @@ class Match
         int $awayTeamGoals
     )
     {
+        if ($homeTeam->getName() === $awayTeam->getName()) {
+            throw new BadMatchException();
+        }
+
         return new self($homeTeam, $awayTeam, $homeTeamGoals, $awayTeamGoals);
     }
 }
