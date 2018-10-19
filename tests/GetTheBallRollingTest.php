@@ -19,11 +19,31 @@ class GetTheBallRollingTest extends TestCase
         $this->assertSame('Hello', $this->ball->getName());
     }
 
-    public function testBinaryGapReturnsTwoThenInTheMiddle() {
+    public function testBinaryGapReturnsTwoWhenInTheMiddle() {
         // 1001
         $n = 9;
 
         $expectedBinaryGap = 2;
+        $actualBinaryGap = $this->ball->getBinaryGap($n);
+
+        $this->assertSame($expectedBinaryGap, $actualBinaryGap);
+    }
+
+    public function testBinaryGapReturnsZeroWhenNotInTheMiddle() {
+        // 1100
+        $n = 12;
+
+        $expectedBinaryGap = 0;
+        $actualBinaryGap = $this->ball->getBinaryGap($n);
+
+        $this->assertSame($expectedBinaryGap, $actualBinaryGap);
+    }
+
+    public function testBinaryGapReturnsLargestGap() {
+        // 1000010001
+        $n = 529;
+
+        $expectedBinaryGap = 4;
         $actualBinaryGap = $this->ball->getBinaryGap($n);
 
         $this->assertSame($expectedBinaryGap, $actualBinaryGap);
