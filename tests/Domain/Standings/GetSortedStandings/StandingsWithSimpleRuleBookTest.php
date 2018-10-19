@@ -7,6 +7,7 @@ use BallGame\Domain\Match\Match;
 use BallGame\Domain\RuleBook\SimpleRuleBook;
 use BallGame\Domain\Standings\Standings;
 use BallGame\Domain\Team\Team;
+use BallGame\Infrastructure\MatchRepository;
 use PHPUnit\Framework\TestCase;
 
 class StandingsWithSimpleRuleBookTest extends TestCase
@@ -16,10 +17,19 @@ class StandingsWithSimpleRuleBookTest extends TestCase
      */
     protected $standings;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|MatchRepository
+     */
+    protected $repository;
+
     public function setUp()
     {
         $ruleBook = new SimpleRuleBook();
-        $this->standings = new Standings($ruleBook);
+        $this->repository = $this->getMockBuilder(MatchRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->standings = new Standings($ruleBook, $this->repository);
     }
 
     public function testGetSortedStandingsWhenThereWasAMatchBetweenTwoTeams()
@@ -28,9 +38,11 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 2, 1);
-
-        $this->standings->record($match);
+        $this->repository
+            ->method('findAll')
+            ->willReturn([
+                Match::create($tigers, $elephants, 2, 1),
+            ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
@@ -49,9 +61,11 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 0, 1);
-
-        $this->standings->record($match);
+        $this->repository
+            ->method('findAll')
+            ->willReturn([
+                Match::create($tigers, $elephants, 0, 1),
+            ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
@@ -64,21 +78,17 @@ class StandingsWithSimpleRuleBookTest extends TestCase
         $this->assertSame($expectedStandings, $actualStandings);
     }
 
-    public function testgetSortedStandingsCanBeWeirdWithManyTeams()
+    public function testGetSortedStandingsCanBeWeirdWithManyTeams()
     {
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 0, 1);
-
-        $this->standings->record($match);
-
-        $tigers = Team::create('Tigers');
-        $elephants = Team::create('Elephants');
-
-        $match = Match::create($tigers, $elephants, 0, 2);
-
-        $this->standings->record($match);
+        $this->repository
+            ->method('findAll')
+            ->willReturn([
+                Match::create($tigers, $elephants, 0, 1),
+                Match::create($tigers, $elephants, 0, 2),
+            ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
