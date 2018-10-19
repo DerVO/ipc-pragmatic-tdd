@@ -7,6 +7,7 @@ use BallGame\Domain\Match\Match;
 use BallGame\Domain\RuleBook\AdvancedRuleBook;
 use BallGame\Domain\Standings\Standings;
 use BallGame\Domain\Team\Team;
+use BallGame\Infrastructure\MatchRepository;
 use PHPUnit\Framework\TestCase;
 
 class StandingsWithAdvancedRulebookTest extends TestCase
@@ -19,7 +20,8 @@ class StandingsWithAdvancedRulebookTest extends TestCase
     public function setUp()
     {
         $rulebook = new AdvancedRuleBook();
-        $this->standings = new Standings($rulebook);
+        $repository = new MatchRepository();
+        $this->standings = new Standings($rulebook, $repository);
     }
 
     public function testGetSortedStandingsWhenThereWasAMatchBetweenTwoTeams()
