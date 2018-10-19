@@ -20,13 +20,9 @@ class SimpleRuleBook implements RuleBookInterface
     {
         if ($positionTeamA->getPoints() > $positionTeamB->getPoints()) {
             return -1;
-        }
-
-        if ($positionTeamB->getPoints() > $positionTeamA->getPoints()) {
+        } elseif ($positionTeamB->getPoints() > $positionTeamA->getPoints()) {
             return 1;
-        }
-
-        if ($positionTeamA->getPoints() === $positionTeamB->getPoints()) {
+        } else {
             return 0;
         }
     }

@@ -59,6 +59,7 @@ class AdvancedRulebookTest extends TestCase
         $this->teamPositionB->method('getGoalDifference')->willReturn(85-24);
 
         $this->assertSame(-1, $this->ruleBook->decide($this->teamPositionA, $this->teamPositionB));
+        $this->assertSame(1, $this->ruleBook->decide($this->teamPositionB, $this->teamPositionA));
     }
 
     public function testDecideShouldReturnPositiveIfBothTeamsHaveEqualPointsAndEqualGoalDifferenceAndFirstTeamScoredMoreGoals()
@@ -66,11 +67,28 @@ class AdvancedRulebookTest extends TestCase
         $this->teamPositionA->method('getPoints')->willReturn(39);
         $this->teamPositionA->method('getGoalsScored')->willReturn(86);
         $this->teamPositionA->method('getGoalsAgainst')->willReturn(25);
+        $this->teamPositionA->method('getGoalDifference')->willReturn(86-25);
 
         $this->teamPositionB->method('getPoints')->willReturn(39);
         $this->teamPositionB->method('getGoalsScored')->willReturn(85);
         $this->teamPositionB->method('getGoalsAgainst')->willReturn(24);
+        $this->teamPositionB->method('getGoalDifference')->willReturn(85-24);
 
         $this->assertSame(-1, $this->ruleBook->decide($this->teamPositionA, $this->teamPositionB));
+    }
+
+    public function testDecideShouldReturnZeroBothTeamsHaveEqualPointsAndEqualGoalDifferenceAndEqualScoredGoals()
+    {
+        $this->teamPositionA->method('getPoints')->willReturn(17);
+        $this->teamPositionA->method('getGoalsScored')->willReturn(86);
+        $this->teamPositionA->method('getGoalsAgainst')->willReturn(25);
+        $this->teamPositionA->method('getGoalDifference')->willReturn(86-25);
+
+        $this->teamPositionB->method('getPoints')->willReturn(17);
+        $this->teamPositionB->method('getGoalsScored')->willReturn(86);
+        $this->teamPositionB->method('getGoalsAgainst')->willReturn(25);
+        $this->teamPositionB->method('getGoalDifference')->willReturn(86-25);
+
+        $this->assertSame(0, $this->ruleBook->decide($this->teamPositionA, $this->teamPositionB));
     }
 }
