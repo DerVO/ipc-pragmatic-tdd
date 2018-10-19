@@ -25,11 +25,30 @@ class Match
         $this->teamAway = $teamAway;
         $this->goalsHome = $goalsHome;
         $this->goalsAway = $goalsAway;
-
     }
 
     public static function create(Team $teamHome, Team $teamAway, int $goalsHome, int $goalsAway)
     {
         return new self($teamHome, $teamAway, $goalsHome, $goalsAway);
+    }
+
+    public function getHomeTeam(): Team
+    {
+        return $this->teamHome;
+    }
+
+    public function getAwayTeam(): Team
+    {
+        return $this->teamAway;
+    }
+
+    public function getHomeGoals(): int
+    {
+        return $this->goalsHome;
+    }
+
+    public function getAwayGoals(): int
+    {
+        return $this->goalsAway;
     }
 }

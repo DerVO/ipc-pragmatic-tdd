@@ -11,6 +11,7 @@ class Standings
      * @var array
      */
     private $matches;
+    private $teamPositions;
 
     /**
      * Standings constructor.
@@ -26,9 +27,26 @@ class Standings
 
     public function getSortedStandings()
     {
-        return [
-            ['Tigers', 2, 1, 3],
-            ['Elephants', 1, 2, 0],
-        ];
+        $teamsArray = array();
+        foreach ($this->matches as $match)
+        {
+            $homeTeam = $match->getHomeTeam();
+            $homeTeam->getTeamPosition()->recordGame($match->getHomeGoals(), $match->getAwayGoals());
+            $awayTeam = $match->getAwayTeam();
+            $awayTeam->getTeamPosition()->recordGame($match->getAwayGoals(), $match->getHomeGoals());
+
+            $teamsArray[] = $homeTeam;
+            $teamsArray[] = $awayTeam;
+        }
+
+        $standings = array();
+        foreach (array_unique($teamsArray) as $team) {
+            $pos = $team->getTeamPosition();
+            $standings[] = [$team->getName(), $pos->getGoalsScored(), $pos->getGoalsReceived(), $pos->getPoints()];
+        }
+        usort($standings, function ($a, $b) {
+            return $b[3] - $a[3];
+        });
+        return $standings;
     }
 }
