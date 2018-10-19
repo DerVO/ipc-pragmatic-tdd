@@ -64,6 +64,11 @@ class TeamPosition
         return $this->goalsAgainst;
     }
 
+    public function getGoalDifference()
+    {
+        return $this->getGoalsScored() - $this->getGoalsAgainst();
+    }
+
     /**
      * @return Team
      */
