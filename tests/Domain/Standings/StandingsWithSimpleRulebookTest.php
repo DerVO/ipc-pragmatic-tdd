@@ -17,11 +17,19 @@ class StandingsWithSimpleRulebookTest extends TestCase
      */
     protected $standings;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|MatchRepository
+     */
+    private $repository_mock;
+
     public function setUp()
     {
         $rulebook = new SimpleRuleBook();
-        $repository = new MatchRepository();
-        $this->standings = new Standings($rulebook, $repository);
+
+        $this->repository_mock = $this->getMockBuilder(MatchRepository::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->standings = new Standings($rulebook, $this->repository_mock);
     }
 
     public function testGetSortedStandingsWhenThereWasAMatchBetweenTwoTeams()
@@ -30,9 +38,9 @@ class StandingsWithSimpleRulebookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 2, 1);
-
-        $this->standings->record($match);
+        $this->repository_mock->method('findAll')->willReturn([
+            Match::create($tigers, $elephants, 2, 1),
+        ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
@@ -51,9 +59,9 @@ class StandingsWithSimpleRulebookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 0, 1);
-
-        $this->standings->record($match);
+        $this->repository_mock->method('findAll')->willReturn([
+            Match::create($tigers, $elephants, 0, 1),
+        ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();

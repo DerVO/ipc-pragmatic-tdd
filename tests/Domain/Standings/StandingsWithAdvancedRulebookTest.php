@@ -17,11 +17,19 @@ class StandingsWithAdvancedRulebookTest extends TestCase
      */
     protected $standings;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|MatchRepository
+     */
+    private $repository_mock;
+
     public function setUp()
     {
         $rulebook = new AdvancedRuleBook();
-        $repository = new MatchRepository();
-        $this->standings = new Standings($rulebook, $repository);
+
+        $this->repository_mock = $this->getMockBuilder(MatchRepository::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->standings = new Standings($rulebook, $this->repository_mock);
     }
 
     public function testGetSortedStandingsWhenThereWasAMatchBetweenTwoTeams()
@@ -30,9 +38,9 @@ class StandingsWithAdvancedRulebookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 2, 1);
-
-        $this->standings->record($match);
+        $this->repository_mock->method('findAll')->willReturn([
+            Match::create($tigers, $elephants, 2, 1),
+        ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
@@ -51,9 +59,9 @@ class StandingsWithAdvancedRulebookTest extends TestCase
         $tigers = Team::create('Tigers');
         $elephants = Team::create('Elephants');
 
-        $match = Match::create($tigers, $elephants, 0, 1);
-
-        $this->standings->record($match);
+        $this->repository_mock->method('findAll')->willReturn([
+            Match::create($tigers, $elephants, 0, 1),
+        ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
@@ -74,12 +82,14 @@ class StandingsWithAdvancedRulebookTest extends TestCase
         $snakes = Team::create('Snakes');
         $lions = Team::create('Lions');
 
-        $this->standings->record(Match::create($tigers, $elephants, 2, 0));
-        $this->standings->record(Match::create($tigers, $snakes, 2, 1));
-        $this->standings->record(Match::create($tigers, $lions, 0, 1));
-        $this->standings->record(Match::create($elephants, $snakes, 0, 1));
-        $this->standings->record(Match::create($elephants, $lions, 1, 2));
-        $this->standings->record(Match::create($snakes, $lions, 3, 1));
+        $this->repository_mock->method('findAll')->willReturn([
+            Match::create($tigers, $elephants, 2, 0),
+            Match::create($tigers, $snakes, 2, 1),
+            Match::create($tigers, $lions, 0, 1),
+            Match::create($elephants, $snakes, 0, 1),
+            Match::create($elephants, $lions, 1, 2),
+            Match::create($snakes, $lions, 3, 1),
+        ]);
 
         // When
         $actualStandings = $this->standings->getSortedStandings();
