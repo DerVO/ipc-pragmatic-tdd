@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BallGame\Domain\Team;
 
 
+use BallGame\Domain\Exception\BadTeamException;
+
 class Team
 {
     /**
@@ -14,6 +16,9 @@ class Team
 
     private function __construct(string $name)
     {
+        if (empty(trim($name))) {
+            throw new BadTeamException();
+        }
         $this->name = $name;
     }
 
